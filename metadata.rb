@@ -8,7 +8,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version '1.2.1'
 
 depends 'deployer'
-depends 'ruby-ng'
+depends 'rvm', '~> 0.9'
 depends 'nginx', '~> 2.7'
 
 supports 'amazon', '>= 2015.03'
