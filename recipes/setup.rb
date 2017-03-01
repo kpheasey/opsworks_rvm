@@ -6,15 +6,10 @@
 
 prepare_recipe
 
-include_recipe 'deployer'
-
 # Ruby and bundler
+include_recipe 'deployer'
 include_recipe 'rvm::default'
 include_recipe 'rvm::system'
-
-link '/usr/local/bin/bundle' do
-  to "/usr/local/rvm/wrappers/#{node['rvm']['default_ruby']}/bundle"
-end
 
 apt_repository 'apache2' do
   uri 'http://ppa.launchpad.net/ondrej/apache2/ubuntu'
@@ -23,6 +18,16 @@ apt_repository 'apache2' do
   keyserver 'keyserver.ubuntu.com'
   key 'E5267A6C'
   only_if { node['platform'] == 'ubuntu' }
+end
+
+if node['platform_family'] == 'debian'
+  link '/usr/local/bin/bundle' do
+    to "/usr/local/rvm/wrappers/ruby-#{node['rvm']['default_ruby']}@global/bundle"
+  end
+else
+  link '/usr/local/bin/bundle' do
+    to "/usr/local/rvm/wrappers/#{node['rvm']['default_ruby']}@global/bundler"
+  end
 end
 
 execute 'yum-config-manager --enable epel' if node['platform_family'] == 'rhel'
